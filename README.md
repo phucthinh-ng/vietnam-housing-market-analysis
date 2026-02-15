@@ -91,7 +91,7 @@ Prices increase with area, but the relationship is **non-linear**, and property 
 
 ---
 
-### Sheet 3 – District Benchmarking
+### Sheet 3 – Market Benchmark
 - Top 10 districts by median price per m²
 - Price difference vs overall market median (DAX-based)
 - District × Property Type matrix
