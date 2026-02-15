@@ -122,8 +122,3 @@ Some districts are significantly **over-valued or under-valued** relative to the
 - Extreme outliers were removed using the IQR method to improve analysis reliability
 - All visuals are fully interactive via slicers and cross-filtering
 
----
-
-## 👤 Author
-**Vietnam Housing Market Analysis**  
-Built as a portfolio project demonstrating SQL data processing and Power BI analytical storytelling.
