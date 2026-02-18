@@ -34,15 +34,15 @@ Tăng cường khả năng phân tích bằng các kỹ thuật thống kê:
 Hệ thống Dashboard cung cấp cái nhìn chi tiết về thị trường:
 
 ### Trang 1: Tổng quan thị trường
-![Overview](Screenshots/01_Housing_Overview.png)
+![Overview](screenshots/01_Housing_Overview.png)
 * Thị trường ghi nhận **74.81K tin đăng** với mức giá trung bình **4.02 tỷ VND/căn**.
 
 ### Trang 2: Phân tích Giá & Diện tích
-![Price vs Area](Screenshots/02_Price_Area_Analysis.png)
+![Price vs Area](screenshots/02_Price_Area_Analysis.png)
 * Mối tương quan giữa diện tích và giá là phi tuyến tính; phân khúc **Nhà biệt thự** và **Nhà mặt phố** có đơn giá m² cao vượt trội.
 
 ### Trang 3: So sánh khu vực & Benchmark
-![District Benchmark](Screenshots/03_District_Benchmark.png)
+![District Benchmark](screenshots/03_District_Benchmark.png)
 * Sử dụng DAX để so sánh giá từng khu vực với mức **Median thị trường (90M/m²)**, giúp xác định các vùng đang bị định giá cao.
 
 ## 💡 Business Impact
@@ -51,5 +51,4 @@ Hệ thống Dashboard cung cấp cái nhìn chi tiết về thị trường:
 
 ---
 **Contact Information:**
-* **LinkedIn:** [Link của Sói]
-* **Email:** [Email của Sói]
+* **Email:** nguyenphucthinh.work@gmail.com
