@@ -1,124 +1,55 @@
-# Vietnam Housing Market Analysis 🏘️📊
+# 🏠 Hanoi Housing Market Analysis: End-to-End Data Pipeline
 
-## 📌 Project Overview
-This project analyzes the **Vietnam housing market** with a focus on **price per square meter**, **property types**, and **district-level comparisons**.  
-The goal is to build an **end-to-end data analysis pipeline**, from raw data profiling and cleaning in SQL to interactive insights and benchmarking in Power BI.
+## 📝 Tổng quan dự án
+Dự án này thực hiện phân tích chuyên sâu trên tập dữ liệu **Vietnam Housing Dataset (Hanoi)** với hơn 82,000 bản ghi thô từ Kaggle. Mục tiêu của dự án là xây dựng một quy trình xử lý dữ liệu hoàn chỉnh (End-to-End) bao gồm: Thăm dò dữ liệu (Profiling), Làm sạch (Cleaning), Làm giàu dữ liệu (Enrichment) và Trực quan hóa Dashboard để tìm ra các xu hướng giá bất động sản tại Hà Nội.
 
-The project answers key questions such as:
-- How do housing prices vary across districts?
-- How does price relate to property size (area)?
-- Which districts are over- or under-valued compared to the overall market?
-- How do different property types compare in terms of price per m²?
+## 🛠️ Tech Stack & Công cụ
+* **Database:** SQL Server (T-SQL) - Thực hiện toàn bộ quy trình ETL.
+* **Visualization:** Power BI - Xây dựng báo cáo phân tích đa chiều.
+* **IDE:** DBeaver - Quản trị và thực thi truy vấn.
+* **Dataset:** Vietnam Housing Dataset (Kaggle).
 
----
+## 🏗️ Quy trình xử lý dữ liệu
 
-## 🧱 Project Structure
+### 1. Data Profiling (Thăm dò dữ liệu)
+Tôi đã thực hiện kịch bản SQL Profiling để xác định các vấn đề về chất lượng dữ liệu:
+* **Bất đồng nhất đơn vị:** Cột đơn giá chứa 3 loại đơn vị khác nhau (triệu/m², đ/m², tỷ/m²).
+* **Dữ liệu rác:** Phát hiện nhiều giá trị 'NaN' dạng văn bản và các dòng trống (Blank).
+* **Lỗi thời gian:** Phát hiện các bản ghi có năm 1900 do lỗi định dạng ngày tháng.
+* **Dữ liệu dạng hỗn hợp:** Các cột số tầng, số phòng ngủ bị trộn lẫn chữ và số (ví dụ: "Nhiều hơn 10").
 
----
+### 2. Data Cleaning (Làm sạch dữ liệu)
+Dữ liệu được chuẩn hóa thông qua hệ thống View trong SQL:
+* **Chuẩn hóa tiền tệ:** Chuyển đổi toàn bộ các mức đơn giá khác nhau về đơn vị VND duy nhất.
+* **Xử lý Missing Values:** Sử dụng `COALESCE` và `NULLIF` để chuyển đổi 'NaN' thành 'Undefined'.
+* **Chuẩn hóa kỹ thuật:** Tách bỏ đơn vị đo (m², m) để ép kiểu dữ liệu về dạng số (Numeric) phục vụ tính toán.
 
-## 🛢️ SQL Data Pipeline
+### 3. Data Enrichment (Làm giàu dữ liệu)
+Tăng cường khả năng phân tích bằng các kỹ thuật thống kê:
+* **Xử lý Outliers:** Sử dụng phương pháp **IQR (Interquartile Range)** kết hợp với `PERCENTILE_CONT` để loại bỏ các bất động sản có giá trị "ngáo" hoặc sai lệch.
+* **Phân khúc thị trường:** Tạo các "Buckets" để phân loại diện tích và phân khúc giá (Thấp, Trung bình, Cao).
+* **Biến thời gian:** Tách YEAR/MONTH từ dữ liệu ngày tháng để phân tích xu hướng theo thời gian.
 
-### 1️⃣ Data Profiling
-**File:** `01_data_profiling_vietnam_housing.sql`
+## 📊 Dashboard Key Insights
+Hệ thống Dashboard cung cấp cái nhìn chi tiết về thị trường:
 
-Purpose:
-- Understand raw data structure and quality
-- Check missing values, duplicates, and data ranges
-- Explore distributions of price, area, property type, and legal status
+### Trang 1: Tổng quan thị trường
+![Overview](Screenshots/01_Housing_Overview.png)
+* Thị trường ghi nhận **74.81K tin đăng** với mức giá trung bình **4.02 tỷ VND/căn**.
 
-Key checks include:
-- NULL value counts
-- Outlier detection (extreme price and area values)
-- Category completeness (districts, property types)
+### Trang 2: Phân tích Giá & Diện tích
+![Price vs Area](Screenshots/02_Price_Area_Analysis.png)
+* Mối tương quan giữa diện tích và giá là phi tuyến tính; phân khúc **Nhà biệt thự** và **Nhà mặt phố** có đơn giá m² cao vượt trội.
 
----
+### Trang 3: So sánh khu vực & Benchmark
+![District Benchmark](Screenshots/03_District_Benchmark.png)
+* Sử dụng DAX để so sánh giá từng khu vực với mức **Median thị trường (90M/m²)**, giúp xác định các vùng đang bị định giá cao.
 
-### 2️⃣ Data Cleaning
-**File:** `02_data_cleaning_vietnam_housing.sql`
-
-Purpose:
-- Remove or handle invalid records
-- Standardize units and formats
-- Filter extreme outliers using statistical rules (IQR)
-
-Main actions:
-- Removed listings with invalid or zero area
-- Filtered extreme price-per-m² outliers
-- Standardized district and property type naming
-
----
-
-### 3️⃣ Data Enrichment
-**File:** `03_data_enrichment_vietnam_housing.sql`
-
-Purpose:
-- Create analytical metrics for BI analysis
-- Prepare clean, analysis-ready tables
-
-Key derived fields:
-- `price_per_m2`
-- Price segment classification (Low / Medium / High)
-- Market median price per m² (benchmark)
-- District-level median price per m²
-
-These enriched fields are used directly in Power BI.
+## 💡 Business Impact
+* Tối ưu hóa việc tìm kiếm bất động sản dựa trên các tiêu chí chuẩn hóa về pháp lý và loại hình.
+* Cung cấp bộ lọc tin cậy bằng cách loại bỏ hơn 10% dữ liệu sai lệch (outliers) thông qua thuật toán IQR.
 
 ---
-
-## 📊 Power BI Dashboard
-
-**File:** `04_powerbi_vietnam_housing_analysis.pbix`
-
-### Sheet 1 – Market Overview
-- Total listings
-- Average listing price
-- Median price per m²
-- Average area
-- Distribution of listings by price segment
-- Top districts by average price
-
-**Purpose:** Provide a high-level snapshot of the housing market.
-
----
-
-### Sheet 2 – Price vs Area Analysis
-- Scatter plot: Price vs Area by property type
-- Median price per m² by property type
-- Interactive filters (district, legal status)
-
-**Key insight:**  
-Prices increase with area, but the relationship is **non-linear**, and property type plays a significant role.
-
----
-
-### Sheet 3 – Market Benchmark
-- Top 10 districts by median price per m²
-- Price difference vs overall market median (DAX-based)
-- District × Property Type matrix
-- KPI cards comparing selected area vs market median
-
-**Key insight:**  
-Some districts are significantly **over-valued or under-valued** relative to the market benchmark, even if they are not the most expensive in absolute terms.
-
----
-
-## 🧠 Key Insights
-- Housing prices vary significantly across districts
-- Townhouses and villas consistently command higher prices per m²
-- High absolute price does not always imply strong deviation from market median
-- Benchmarking against the market median helps identify over- and under-valued areas
-
----
-
-## 🛠️ Tools & Technologies
-- **SQL** (PostgreSQL / compatible syntax)
-- **Power BI**
-- **DAX** (Median, Benchmark, Price Difference calculations)
-- **Git & GitHub**
-
----
-
-## 📎 Notes
-- Extreme outliers were removed using the IQR method to improve analysis reliability
-- All visuals are fully interactive via slicers and cross-filtering
-
+**Contact Information:**
+* **LinkedIn:** [Link của Sói]
+* **Email:** [Email của Sói]
